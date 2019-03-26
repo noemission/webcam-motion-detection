@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Motion detection</title>
+	<style type="text/css">
+		html,
+		body {
+			background-color: #111;
+			text-align: center;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="demo-container">
+		<canvas id="video-canvas"></canvas>
+	</div>
+	<script type="text/javascript">
+		var canvas = document.getElementById('video-canvas');
+		var canvasCtx = canvas.getContext('2d');
+		const socket = new WebSocket(`ws://${location.host}/ws`)
+		socket.binaryType = 'blob'
+		socket.addEventListener('message', function (event) {
+			let img = new Image()
+			img.src = URL.createObjectURL(event.data)
+			img.onload = () => {
+				canvas.width = img.width;
+				canvas.height = img.height;
+				canvasCtx.drawImage(img, 0, 0)
+			}
+		});
+	</script>
+</body>
+
+</html>
